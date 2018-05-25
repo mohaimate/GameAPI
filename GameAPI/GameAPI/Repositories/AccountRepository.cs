@@ -11,16 +11,12 @@ namespace GameAPI.Repositories
     {
         public static bool AddAccount(Account account)
         {
-            var connectionString = "Data Source=unitygame.cywsg609ru17.us-east-2.rds.amazonaws.com;" +
-            "Initial Catalog=unitygame;" +
-            "User id=Mohaimate;" +
-            "Password=Pass912331";
             var query = "INSERT INTO Account (Email, Password) VALUES ('@Email', '@Password')";
 
             query = query.Replace("@Email", account.Email)
                     .Replace("@Password", account.Password);
 
-            SqlConnection connection = new SqlConnection(connectionString);
+            SqlConnection connection = ConnectionBuilder.getConn();
 
             try
             {
@@ -39,16 +35,12 @@ namespace GameAPI.Repositories
 
         public static int Login(Account account)
         {
-            var connectionString = "Data Source=unitygame.cywsg609ru17.us-east-2.rds.amazonaws.com;" +
-            "Initial Catalog=unitygame;" +
-            "User id=Mohaimate;" +
-            "Password=Pass912331";
             var query = "SELECT AccountID FROM Account WHERE Email = '@Email' AND Password = '@Password'";
 
             query = query.Replace("@Email", account.Email)
                     .Replace("@Password", account.Password);
 
-            SqlConnection connection = new SqlConnection(connectionString);
+            SqlConnection connection = ConnectionBuilder.getConn();
 
             try
             {
