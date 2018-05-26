@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Web;
 
 namespace GameAPI.Repositories
@@ -14,7 +16,7 @@ namespace GameAPI.Repositories
             var query = "INSERT INTO Account (Email, Password) VALUES ('@Email', '@Password')";
 
             query = query.Replace("@Email", account.Email)
-                    .Replace("@Password", account.Password);
+                    .Replace("@Password", GenerateSHA256String(account.Password));
 
             SqlConnection connection = ConnectionBuilder.getConn();
 
@@ -62,6 +64,24 @@ namespace GameAPI.Repositories
             {
                 return 0;
             }
+        }
+
+        public static string GenerateSHA256String(string inputString)
+        {
+            SHA256 sha256 = SHA256Managed.Create();
+            byte[] bytes = Encoding.UTF8.GetBytes(inputString);
+            byte[] hash = sha256.ComputeHash(bytes);
+            return GetStringFromHash(hash);
+        }
+
+        private static string GetStringFromHash(byte[] hash)
+        {
+            StringBuilder result = new StringBuilder();
+            for (int i = 0; i < hash.Length; i++)
+            {
+                result.Append(hash[i].ToString("X2"));
+            }
+            return result.ToString();
         }
     }
 }
