@@ -48,18 +48,25 @@ namespace GameAPI.Repositories
                 "Currentcoin = '@Currentcoin'," +
                 "Alltimecoin = '@Alltimecoin' " +
                 "WHERE AccountID = '"+ progress.AccountID +"'";
+
+            query = query.Replace("@Level", Convert.ToString(progress.Level))
+                    .Replace("@Currentcoin", Convert.ToString(progress.Currentcoin))
+                    .Replace("@Alltimecoin", Convert.ToString(progress.Alltimecoin))
+                    .Replace("@AccountID", Convert.ToString(progress.AccountID));
+
             SqlConnection connection = ConnectionBuilder.getConn();
 
             try
             {
                 connection.Open();
                 SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.Add("@Level", System.Data.SqlDbType.Int);
+                /*command.Parameters.Add("@Level", System.Data.SqlDbType.Int);
                 command.Parameters.Add("@Currentcoin", System.Data.SqlDbType.Int);
                 command.Parameters.Add("@Alltimecoin", System.Data.SqlDbType.Int);
                 command.Parameters["@Level"].Value = Convert.ToString(progress.Level);
                 command.Parameters["@Currentcoin"].Value = Convert.ToString(progress.Currentcoin);
-                command.Parameters["@Alltimecoin"].Value = Convert.ToString(progress.Alltimecoin);
+                command.Parameters["@Alltimecoin"].Value = Convert.ToString(progress.Alltimecoin);*/
+
                 command.ExecuteNonQuery();
                 command.Dispose();
                 connection.Close();
